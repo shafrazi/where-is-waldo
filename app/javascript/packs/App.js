@@ -16,6 +16,10 @@ const ImageContainer = styled.div`
   height: 805px;
   background: url(${Image}) no-repeat;
   background-size: cover;
+
+  div:hover {
+    border: 4px solid blue;
+  }
 `;
 
 const WaldoImage = styled.img`

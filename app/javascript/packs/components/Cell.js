@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 const CellItem = styled.div`
-  border: solid 1px black;
   width: 100%;
   height: 100%;
   color: white;
@@ -16,7 +15,9 @@ class Cell extends React.Component {
     super(props);
     this.state = {
       styles: {
-        backgroundColor: "black",
+        backgroundColor: "yellow",
+        opacity: 0.5,
+        border: "2px solid blue",
       },
     };
   }
