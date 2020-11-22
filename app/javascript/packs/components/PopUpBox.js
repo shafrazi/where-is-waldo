@@ -24,7 +24,7 @@ function PopUpBox(props) {
   return (
     <PopUp style={props.style}>
       <OptionDiv onClick={props.handleOptionClick}>Waldo</OptionDiv>
-      <OptionDiv onClick={props.handleOptionClick}>Wilma</OptionDiv>
+      <OptionDiv onClick={props.handleOptionClick}>Odlaw</OptionDiv>
       <OptionDiv onClick={props.handleOptionClick}>Whitebeard</OptionDiv>
     </PopUp>
   );

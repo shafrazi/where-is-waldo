@@ -60,6 +60,22 @@ class App extends React.Component {
       displayBox: false,
       character: event.target.innerHTML,
     });
+
+    fetch(`/characters/${this.state.cellId}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (response) {
+          if (response.name === this.state.character) {
+            console.log("Matched!");
+          } else {
+            console.log("Mismatched!");
+          }
+        } else {
+          console.log("Mismatched!");
+        }
+      });
   };
 
   render() {
