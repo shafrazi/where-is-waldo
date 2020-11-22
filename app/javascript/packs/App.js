@@ -40,7 +40,7 @@ const ErrorMsg = styled.div`
   position: relative;
   width: 500px;
   height: 50px;
-  left: 730px;
+  left: 36%;
   top: -500px;
   background-color: white;
   padding: 15px;
@@ -125,6 +125,12 @@ class App extends React.Component {
     return (
       <div>
         <Header />
+        {this.state.displayError ? (
+          <ErrorMsg>
+            {this.state.character} is not here. Look hard, they might be
+            somewhere else!
+          </ErrorMsg>
+        ) : null}
         <ImageContainer>{CellComponents}</ImageContainer>
         {this.state.displayBox ? (
           <PopUpBox
