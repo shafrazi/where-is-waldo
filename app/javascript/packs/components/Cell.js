@@ -5,12 +5,20 @@ const CellItem = styled.div`
   border: solid 1px black;
   width: 100%;
   height: 100%;
+  color: white;
+  padding-top: 10px;
+  text-align: center;
+  font-size: 12px;
 `;
 
 class Cell extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      styles: {
+        backgroundColor: "black",
+      },
+    };
   }
 
   render() {
@@ -19,6 +27,7 @@ class Cell extends React.Component {
         onClick={(event) => {
           this.props.handleClick(event, this.props.id);
         }}
+        style={this.props.marked ? this.state.styles : null}
       ></CellItem>
     );
   }

@@ -8,8 +8,8 @@ import Image from "images/image.jpg";
 const ImageContainer = styled.div`
   position: relative;
   display: grid;
-  grid-template-columns: repeat(20, 1fr);
-  grid-template-rows: repeat(20, 1fr);
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows: repeat(10, 1fr);
   grid-gap: 0px;
   width: 1280px;
   margin: 10px auto;
@@ -36,10 +36,12 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
+      markedCells: [],
       displayBox: false,
       popUpStyle: {},
       cellId: "",
       character: "",
+      text: "",
     };
   }
 
@@ -69,6 +71,11 @@ class App extends React.Component {
         if (response) {
           if (response.name === this.state.character) {
             console.log("Matched!");
+            this.setState((prevState) => {
+              return {
+                markedCells: prevState.markedCells.concat([prevState.cellId]),
+              };
+            });
           } else {
             console.log("Mismatched!");
           }
@@ -81,10 +88,16 @@ class App extends React.Component {
   render() {
     console.log(this.state);
     const CellComponents = [];
-    for (let i = 0; i < 400; i++) {
-      CellComponents.push(
-        <Cell key={i} id={i} handleClick={this.handleClick} />
-      );
+    for (let i = 0; i < 150; i++) {
+      if (this.state.markedCells.includes(i)) {
+        CellComponents.push(
+          <Cell key={i} id={i} handleClick={this.handleClick} marked={true} />
+        );
+      } else {
+        CellComponents.push(
+          <Cell key={i} id={i} handleClick={this.handleClick} marked={false} />
+        );
+      }
     }
     return (
       <div>
