@@ -7,35 +7,19 @@ const CellItem = styled.div`
   height: 100%;
 `;
 
-const OptionBox = styled.div`
-  position: fixed;
-  width: 100px;
-  height: 100px;
-  margin-left: 30px;
-  margin-top: 20px;
-  background-color: yellow;
-`;
-
 class Cell extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      displayOptions: false,
-    };
+    this.state = {};
   }
-
-  handleClick = (event) => {
-    console.log(event);
-    this.setState({
-      displayOptions: true,
-    });
-  };
 
   render() {
     return (
-      <CellItem onClick={this.handleClick}>
-        {this.state.displayOptions ? <OptionBox>Hello</OptionBox> : null}
-      </CellItem>
+      <CellItem
+        onClick={(event) => {
+          this.props.handleClick(event, this.props.id);
+        }}
+      ></CellItem>
     );
   }
 }
