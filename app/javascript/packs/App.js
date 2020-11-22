@@ -36,6 +36,19 @@ const PopUp = styled.div`
   background-color: yellow;
 `;
 
+const ErrorMsg = styled.div`
+  position: relative;
+  width: 500px;
+  height: 50px;
+  left: 730px;
+  top: -500px;
+  background-color: white;
+  padding: 15px;
+  text-align: center;
+  border-radius: 10px;
+  color: #e5537d;
+`;
+
 class App extends React.Component {
   constructor() {
     super();
@@ -45,7 +58,7 @@ class App extends React.Component {
       popUpStyle: {},
       cellId: "",
       character: "",
-      text: "",
+      displayError: false,
     };
   }
 
@@ -58,6 +71,7 @@ class App extends React.Component {
       },
       cellId: id,
       character: "",
+      displayError: false,
     });
   };
 
@@ -78,13 +92,18 @@ class App extends React.Component {
             this.setState((prevState) => {
               return {
                 markedCells: prevState.markedCells.concat([prevState.cellId]),
+                displayError: false,
               };
             });
           } else {
-            console.log("Mismatched!");
+            this.setState({
+              displayError: true,
+            });
           }
         } else {
-          console.log("Mismatched!");
+          this.setState({
+            displayError: true,
+          });
         }
       });
   };
@@ -112,6 +131,12 @@ class App extends React.Component {
             style={this.state.popUpStyle}
             handleOptionClick={this.handleOptionClick}
           />
+        ) : null}
+        {this.state.displayError ? (
+          <ErrorMsg>
+            {this.state.character} is not here. Look hard, they might be
+            somewhere else!
+          </ErrorMsg>
         ) : null}
       </div>
     );
