@@ -59,6 +59,7 @@ class App extends React.Component {
       cellId: "",
       character: "",
       displayError: false,
+      playerId: "",
     };
   }
 
@@ -75,6 +76,32 @@ class App extends React.Component {
     });
   };
 
+  gameCompleteEventHandler = () => {
+    if (this.state.markedCells.length === 4) {
+      const endTime = new Date();
+      const csrfToken = document.querySelector("[name=csrf-token]").content;
+      const headers = {
+        "Content-type": "application/json",
+        accept: "application/json",
+        "X-CSRF-Token": csrfToken,
+      };
+
+      fetch(`/players/${this.state.playerId}`, {
+        method: "PATCH",
+        headers: headers,
+        body: JSON.stringify({
+          end_time: endTime,
+        }),
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((response) => {
+          console.log(response);
+        });
+    }
+  };
+
   handleOptionClick = (event) => {
     this.setState({
       displayBox: false,
@@ -88,13 +115,13 @@ class App extends React.Component {
       .then((response) => {
         if (response) {
           if (response.name === this.state.character) {
-            console.log("Matched!");
             this.setState((prevState) => {
               return {
                 markedCells: prevState.markedCells.concat([prevState.cellId]),
                 displayError: false,
               };
             });
+            this.gameCompleteEventHandler();
           } else {
             this.setState({
               displayError: true,
@@ -108,8 +135,36 @@ class App extends React.Component {
       });
   };
 
+  componentDidMount() {
+    const startTime = new Date();
+    const csrfToken = document.querySelector("[name=csrf-token]").content;
+    const headers = {
+      "Content-type": "application/json",
+      accept: "application/json",
+      "X-CSRF-Token": csrfToken,
+    };
+
+    fetch("/players", {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify({
+        name: "anonymous",
+        start_time: startTime,
+      }),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({
+          playerId: response.id,
+        });
+      });
+  }
+
   render() {
     console.log(this.state);
+    console.log(this.state.markedCells.length);
     const CellComponents = [];
     for (let i = 0; i < 150; i++) {
       if (this.state.markedCells.includes(i)) {

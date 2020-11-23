@@ -18,6 +18,7 @@ class Cell extends React.Component {
         backgroundColor: "yellow",
         opacity: 0.5,
         border: "2px solid blue",
+        pointerEvents: "none",
       },
     };
   }
