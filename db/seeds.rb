@@ -8,8 +8,9 @@
 
 characters = Character.create(
   [
-    { name: "Waldo", location: 50 },
+    { name: "Wilma", location: 50 },
     { name: "Whitebeard", location: 132 },
     { name: "Odlaw", location: 96 },
+    { name: "Waldo", location: 53 },
   ]
 )
