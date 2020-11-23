@@ -4,4 +4,13 @@
 
 * {
   box-sizing: border-box;
+  font-family: Futura;
+}
+
+::-webkit-input-placeholder {
+  text-align: center;
+}
+
+:-moz-placeholder {
+  text-align: center;
 }

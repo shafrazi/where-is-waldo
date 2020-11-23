@@ -24,8 +24,13 @@ const FormField = styled.div`
 `;
 
 const Button = styled.button`
-  width: 10%;
+  width: 17%;
   margin: auto;
+  font-size: 18px;
+  border-radius: 8px;
+  border: none;
+  color: white;
+  background-color: #ed487f;
 `;
 
 function NameModal(props) {
