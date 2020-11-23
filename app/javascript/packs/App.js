@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Header from "./components/Header";
 import Cell from "./components/Cell";
 import PopUpBox from "./components/PopUpBox";
+import NameModal from "./components/NameModal";
 import Image from "images/image.jpg";
 
 const ImageContainer = styled.div`
@@ -49,6 +50,36 @@ const ErrorMsg = styled.div`
   color: #e5537d;
 `;
 
+const Modal = styled.div`
+  display: none;
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  padding-top: 150px;
+  /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+`;
+
+function timeInMinutes(time) {
+  const minutes = Math.floor(time / 60);
+  const seconds = time - minutes * 60;
+  return `${minutes < 10 ? "0" + `${minutes}` : minutes}:${
+    seconds < 10 ? "0" + `${seconds}` : seconds
+  }`;
+}
+
 class App extends React.Component {
   constructor() {
     super();
@@ -60,8 +91,41 @@ class App extends React.Component {
       character: "",
       displayError: false,
       playerId: "",
+      modalStyles: {},
+      playerName: "",
+      playerTime: "",
     };
   }
+
+  handleChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  handleSubmitName = (event) => {
+    event.preventDefault();
+    const csrfToken = document.querySelector("[name=csrf-token]").content;
+    const headers = {
+      "Content-type": "application/json",
+      accept: "application/json",
+      "X-CSRF-Token": csrfToken,
+    };
+
+    fetch(`/players/${this.state.playerId}`, {
+      method: "PATCH",
+      headers: headers,
+      body: JSON.stringify({
+        name: this.state.playerName,
+      }),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        console.log(response);
+      });
+  };
 
   handleClick = (event, id) => {
     this.setState({
@@ -98,6 +162,12 @@ class App extends React.Component {
         })
         .then((response) => {
           console.log(response);
+          this.setState({
+            modalStyles: {
+              display: "block",
+            },
+            playerTime: timeInMinutes(response.score),
+          });
         });
     }
   };
@@ -164,7 +234,6 @@ class App extends React.Component {
 
   render() {
     console.log(this.state);
-    console.log(this.state.markedCells.length);
     const CellComponents = [];
     for (let i = 0; i < 150; i++) {
       if (this.state.markedCells.includes(i)) {
@@ -199,6 +268,14 @@ class App extends React.Component {
             somewhere else!
           </ErrorMsg>
         ) : null}
+        <Modal style={this.state.modalStyles}>
+          <NameModal
+            handleChange={this.handleChange}
+            handleSubmitName={this.handleSubmitName}
+            playerName={this.state.playerName}
+            playerTime={this.state.playerTime}
+          />
+        </Modal>
       </div>
     );
   }
