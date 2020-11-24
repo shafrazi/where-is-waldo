@@ -272,7 +272,7 @@ class App extends React.Component {
           />
         </Modal>
         <Modal style={this.state.leaderboardStyles}>
-          <Leaderboard />
+          <Leaderboard players={this.state.leaderboard} />
         </Modal>
         {this.state.displayError ? (
           <ErrorMsg>
