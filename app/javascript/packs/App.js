@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Cell from "./components/Cell";
 import PopUpBox from "./components/PopUpBox";
 import NameModal from "./components/NameModal";
+import Leaderboard from "./components/Leaderboard";
 import Image from "images/image.jpg";
 
 const ImageContainer = styled.div`
@@ -13,7 +14,7 @@ const ImageContainer = styled.div`
   grid-template-rows: repeat(10, 1fr);
   grid-gap: 0px;
   width: 1280px;
-  margin: 10px auto;
+  margin: 30px auto;
   height: 805px;
   background: url(${Image}) no-repeat;
   background-size: cover;
@@ -21,20 +22,6 @@ const ImageContainer = styled.div`
   div:hover {
     border: 4px solid blue;
   }
-`;
-
-const WaldoImage = styled.img`
-  width: 90%;
-  height: 90vh;
-`;
-
-const PopUp = styled.div`
-  position: fixed;
-  width: 100px;
-  height: 100px;
-  left: 668px;
-  top: 400px;
-  background-color: yellow;
 `;
 
 const ErrorMsg = styled.div`
@@ -94,6 +81,8 @@ class App extends React.Component {
       modalStyles: {},
       playerName: "",
       playerTime: "",
+      leaderboard: {},
+      leaderboardStyles: {},
     };
   }
 
@@ -103,14 +92,20 @@ class App extends React.Component {
     });
   };
 
-  handleSubmitName = (event) => {
-    event.preventDefault();
+  setRequestHeaders = () => {
     const csrfToken = document.querySelector("[name=csrf-token]").content;
     const headers = {
       "Content-type": "application/json",
       accept: "application/json",
       "X-CSRF-Token": csrfToken,
     };
+
+    return headers;
+  };
+
+  handleSubmitName = (event) => {
+    event.preventDefault();
+    const headers = this.setRequestHeaders();
 
     fetch(`/players/${this.state.playerId}`, {
       method: "PATCH",
@@ -143,12 +138,7 @@ class App extends React.Component {
   gameCompleteEventHandler = () => {
     if (this.state.markedCells.length === 4) {
       const endTime = new Date();
-      const csrfToken = document.querySelector("[name=csrf-token]").content;
-      const headers = {
-        "Content-type": "application/json",
-        accept: "application/json",
-        "X-CSRF-Token": csrfToken,
-      };
+      const headers = this.setRequestHeaders();
 
       fetch(`/players/${this.state.playerId}`, {
         method: "PATCH",
@@ -205,14 +195,24 @@ class App extends React.Component {
       });
   };
 
+  getLeaderboard = () => {
+    fetch("/players")
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        this.setState({
+          leaderboard: response,
+          leaderboardStyles: {
+            display: "block",
+          },
+        });
+      });
+  };
+
   componentDidMount() {
     const startTime = new Date();
-    const csrfToken = document.querySelector("[name=csrf-token]").content;
-    const headers = {
-      "Content-type": "application/json",
-      accept: "application/json",
-      "X-CSRF-Token": csrfToken,
-    };
+    const headers = this.setRequestHeaders();
 
     fetch("/players", {
       method: "POST",
@@ -233,7 +233,7 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state);
+    console.log(this.state.leaderboard);
     const CellComponents = [];
     for (let i = 0; i < 150; i++) {
       if (this.state.markedCells.includes(i)) {
@@ -248,7 +248,7 @@ class App extends React.Component {
     }
     return (
       <div>
-        <Header />
+        <Header getLeaderboard={this.getLeaderboard} />
         {this.state.displayError ? (
           <ErrorMsg>
             {this.state.character} is not here. Look hard, they might be
@@ -262,12 +262,7 @@ class App extends React.Component {
             handleOptionClick={this.handleOptionClick}
           />
         ) : null}
-        {this.state.displayError ? (
-          <ErrorMsg>
-            {this.state.character} is not here. Look hard, they might be
-            somewhere else!
-          </ErrorMsg>
-        ) : null}
+
         <Modal style={this.state.modalStyles}>
           <NameModal
             handleChange={this.handleChange}
@@ -276,6 +271,15 @@ class App extends React.Component {
             playerTime={this.state.playerTime}
           />
         </Modal>
+        <Modal style={this.state.leaderboardStyles}>
+          <Leaderboard />
+        </Modal>
+        {this.state.displayError ? (
+          <ErrorMsg>
+            {this.state.character} is not here. Look hard, they might be
+            somewhere else!
+          </ErrorMsg>
+        ) : null}
       </div>
     );
   }
