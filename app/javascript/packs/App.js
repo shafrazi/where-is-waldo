@@ -86,6 +86,8 @@ class App extends React.Component {
     };
   }
 
+  refreshGame = () => {};
+
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,

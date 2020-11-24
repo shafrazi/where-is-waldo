@@ -23,6 +23,25 @@ const Table = styled.table`
   }
 `;
 
+const TableContainer = styled.div`
+  width: 90%;
+  height: 90%;
+  margin: 10px auto;
+  overflow: scroll;
+`;
+
+const Header = styled.div`
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+`;
+
+const Button = styled.button`
+  background-color: #ed487f;
+  width: 70%;
+  border: none;
+  border-radius: 5px;
+`;
+
 function timeInMinutes(time) {
   const minutes = Math.floor(time / 60);
   const seconds = time - minutes * 60;
@@ -47,16 +66,21 @@ function Leaderboard(props) {
   }
   return (
     <LeaderboardDiv>
-      <h2>Leaderboard</h2>
-      <Table>
-        <tbody>
-          <tr>
-            <th>Name</th>
-            <th>Time</th>
-          </tr>
-          {playerCells}
-        </tbody>
-      </Table>
+      <Header>
+        <h2>Leaderboard</h2>
+        <Button onClick={props.refreshGame}>CLOSE</Button>
+      </Header>
+      <TableContainer>
+        <Table>
+          <tbody>
+            <tr>
+              <th>Name</th>
+              <th>Time</th>
+            </tr>
+            {playerCells}
+          </tbody>
+        </Table>
+      </TableContainer>
     </LeaderboardDiv>
   );
 }
