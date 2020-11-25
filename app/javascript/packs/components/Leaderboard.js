@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 const LeaderboardDiv = styled.div`
   width: 50%;
-  height: 60%;
   background-color: #31bebe;
   margin: 200px auto;
   padding: 10px;
@@ -68,7 +67,7 @@ function Leaderboard(props) {
     <LeaderboardDiv>
       <Header>
         <h2>Leaderboard</h2>
-        <Button onClick={props.refreshGame}>CLOSE</Button>
+        <Button onClick={props.closeLeaderBoard}>CLOSE</Button>
       </Header>
       <TableContainer>
         <Table>

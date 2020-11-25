@@ -1,12 +1,18 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const HeaderDiv = styled.header`
   height: 60px;
   background-color: #31bebe;
   padding: 10px 30px 10px 30px;
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 3fr 1fr 1fr;
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `;
 
 const Button = styled.button`
@@ -22,6 +28,9 @@ function Header(props) {
   return (
     <HeaderDiv>
       <h1>Where's Waldo?</h1>
+      <Button>
+        <Link to="/">Home</Link>
+      </Button>
       <Button onClick={props.getLeaderboard}>Leaderboard</Button>
     </HeaderDiv>
   );
